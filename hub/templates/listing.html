@@ -1,0 +1,43 @@
+<!doctype html>
+<title>elchOS</title>
+<div id="iconsearch" style="float:right; margin: 50px">
+	<img src="/static/icons/elchos.png", style="height:200px;"><br>
+	<form action="/api/search", method="post">
+		<input name="searchterm" placeholder="Search for files"></input>
+	</form>
+</div>
+<div class=page>
+	<h1>{{ site_title }}</h1>
+	<table>
+	<tr>
+		<td>
+			<a href="..">
+				<img src="/static/icons/folder_up.png" style="height:20px;">
+			</a>
+		</td>
+		<td>
+			<a href="..">..</a>
+		</td>
+		
+	{% for link in content %}
+		<tr>
+		{% if link["type"] == "file" %}
+			<td>
+				<a href=ftp://guest:guest@{{ link["nodes"][0] + link["path"] + "/" + link["name"]}}>
+					<img src="/static/icons/file.png" style="height:20px;">
+				</a>
+			</td>
+			<td><a href=ftp://guest:guest@{{ link["nodes"][0] + link["path"] + "/" + link["name"]}}>{{ link["name"] }}</a></td>
+			<td>{{ (link["size"]/1000000)|round(1) }} MB</td>
+		{% endif %}
+		{% if link["type"] == "folder" %}
+			<td>
+				<a href="{{ link["path"] + '/' + link["name"] }}/"></a>
+					<img src="/static/icons/folder.png" style="height:20px;">
+				</a>
+			</td>
+			<td><a href="{{ link["path"] + '/' + link["name"] }}/">{{ link["name"] }}</a><br></td>
+		{% endif %}
+		</tr>
+	{% endfor %}
+</div>
