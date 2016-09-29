@@ -1,4 +1,20 @@
-# Put your custom commands here that should be executed once
-# the system init finished. By default this file does nothing.
+#!/bin/sh
+#
+# announce
 (startup-notify.sh 2>&1 | logger) &
+
+# performance tuning
+
+# improve performance to 130mb/s
+echo 1536 > /sys/block/sda/queue/read_ahead_kb
+echo 1536 > /sys/block/sdb/queue/read_ahead_kb
+# does nothing when single thread?
+echo 1024 > /sys/block/sda/queue/nr_requests
+echo 1024 > /sys/block/sdb/queue/nr_requests
+
+logger "starting proftpd"
+for i in proftpd.conf  proftpd-sda.conf  proftpd-sdb.conf;do
+  proftpd -c "/etc/$i"
+done
+
 exit 0

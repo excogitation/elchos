@@ -1,2 +1,3 @@
 #!/bin/sh
-opkg install --nodeps /pkgs/*
+
+( sleep 10 && opkg update && opkg install /pkgs/*) &
